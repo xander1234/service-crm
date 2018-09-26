@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" id="jsonProvider"/>
+
+    <cxf:rsServer address="http://0.0.0.0:9000/rest/1/h3s0mp2hu4rlrdll/profile/"
+        id="rest" serviceClass="co.com.summan.service_crm.rest.DealList"/>
+        
+    <bean class="co.com.summan.service_crm.Application" id="dealList"/>
+	
+    <!-- You could also define a traditional camel context here -->
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+
+		 <camel:routeBuilder ref="dealList"/>
+	
+    </camelContext>
+</beans>
