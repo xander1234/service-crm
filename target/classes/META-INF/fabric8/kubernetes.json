@@ -6,23 +6,24 @@
     "kind" : "Service",
     "metadata" : {
       "annotations" : {
-        "fabric8.io/iconUrl" : "img/icons/camel.svg"
+        "fabric8.io/git-commit" : "2f2cabd973a3f6276c38a6be36cf8da7e9ed37af",
+        "fabric8.io/iconUrl" : "img/icons/camel.svg",
+        "fabric8.io/git-branch" : "master"
       },
       "labels" : {
-        "expose" : "true",
         "provider" : "fabric8",
         "project" : "service-crm",
-        "version" : "0.0.1-SNAPSHOT",
+        "version" : "1.0.1-SNAPSHOT",
         "group" : "co.com.summan"
       },
       "name" : "service-crm"
     },
     "spec" : {
       "ports" : [ {
-        "name" : "http",
-        "port" : 80,
+        "name" : "rest",
+        "port" : 9000,
         "protocol" : "TCP",
-        "targetPort" : 8080
+        "targetPort" : 9000
       } ],
       "selector" : {
         "project" : "service-crm",
@@ -35,13 +36,15 @@
     "kind" : "Deployment",
     "metadata" : {
       "annotations" : {
+        "fabric8.io/git-commit" : "2f2cabd973a3f6276c38a6be36cf8da7e9ed37af",
         "fabric8.io/iconUrl" : "img/icons/camel.svg",
-        "fabric8.io/metrics-path" : "dashboard/file/camel-routes.json/?var-project=service-crm&var-version=0.0.1-SNAPSHOT"
+        "fabric8.io/git-branch" : "master",
+        "fabric8.io/metrics-path" : "dashboard/file/camel-routes.json/?var-project=service-crm&var-version=1.0.1-SNAPSHOT"
       },
       "labels" : {
         "provider" : "fabric8",
         "project" : "service-crm",
-        "version" : "0.0.1-SNAPSHOT",
+        "version" : "1.0.1-SNAPSHOT",
         "group" : "co.com.summan"
       },
       "name" : "service-crm"
@@ -58,31 +61,33 @@
       "template" : {
         "metadata" : {
           "annotations" : {
+            "fabric8.io/git-commit" : "2f2cabd973a3f6276c38a6be36cf8da7e9ed37af",
             "fabric8.io/iconUrl" : "img/icons/camel.svg",
-            "fabric8.io/metrics-path" : "dashboard/file/camel-routes.json/?var-project=service-crm&var-version=0.0.1-SNAPSHOT"
+            "fabric8.io/git-branch" : "master",
+            "fabric8.io/metrics-path" : "dashboard/file/camel-routes.json/?var-project=service-crm&var-version=1.0.1-SNAPSHOT"
           },
           "labels" : {
             "provider" : "fabric8",
             "project" : "service-crm",
-            "version" : "0.0.1-SNAPSHOT",
+            "version" : "1.0.1-SNAPSHOT",
             "group" : "co.com.summan"
           }
         },
         "spec" : {
           "containers" : [ {
             "env" : [ {
+              "name" : "SPRING_APPLICATION_JSON",
+              "value" : "{\"server\":{\"undertow\":{\"io-threads\":1, \"worker-threads\":2 }}}"
+            }, {
               "name" : "KUBERNETES_NAMESPACE",
               "valueFrom" : {
                 "fieldRef" : {
                   "fieldPath" : "metadata.namespace"
                 }
               }
-            }, {
-              "name" : "JAVA_APP_DIR",
-              "value" : "/deployments"
             } ],
-            "image" : "service-crm:latest",
-            "imagePullPolicy" : "Always",
+            "image" : "summan/service-crm:snapshot-191126-162220-0050",
+            "imagePullPolicy" : "IfNotPresent",
             "livenessProbe" : {
               "httpGet" : {
                 "path" : "/health",
@@ -113,10 +118,12 @@
             },
             "resources" : {
               "limits" : {
-                "cpu" : "1.0"
+                "cpu" : "0.2",
+                "memory" : "512Mi"
               },
               "requests" : {
-                "cpu" : "0.2"
+                "cpu" : "0.1",
+                "memory" : "256Mi"
               }
             },
             "securityContext" : {
